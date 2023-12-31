@@ -1,8 +1,8 @@
 ---
 layout: single
-title: Delivery - Hack The Box
+title: Blue - Hack The Box
 excerpt: "Blue, while possibly the most simple machine on Hack The Box, demonstrates the severity of the EternalBlue exploit, which has been used in multiple large-scale ransomware and crypto-mining attacks since it was leaked publicly."
-date: 2021-05-22
+date: 31-12-2023
 classes: wide
 header:
   teaser: /assets/images/htb-writeup-blue/htb-eternalblue-logo.png
@@ -10,13 +10,13 @@ header:
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox
-  - infosec
+  - RetiredMachines
 tags:  
-  - osticket
-  - mysql
-  - mattermost
-  - hashcat
-  - rules
+  - Windows
+  - SMB
+  - metasploit
+  - Eternal Blue
+  - meterpreter
 ---
 
 ![](/assets/images/htb-writeup-blue/htb-eternalblue-logo.png)
