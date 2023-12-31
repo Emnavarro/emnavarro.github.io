@@ -27,7 +27,7 @@ Delivery is a quick and fun easy box where we have to create a MatterMost accoun
 
 ## Portscan
 
-The scan show that we have port 22 and port 80 open with an apache  web server 
+The scan shows that we have port 22 and port 80 open with an apache  web server 
 
 ```
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2023-12-23 19:04 EST
