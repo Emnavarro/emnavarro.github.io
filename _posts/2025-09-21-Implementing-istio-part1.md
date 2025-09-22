@@ -48,27 +48,52 @@ Istio introduces a control plane that allows you to manage traffic flow, enforce
 - Integration with identity providers (OIDC/JWT): allows you to integrate with external identity providers for user authentication and authorization.
 - Auditability: provides detailed logs and metrics for all traffic within the mesh, making it easier to detect anomalies.
 
-## Instalation
-I´ll be installing the istio via helm.
+
+## Architecture in my homelab 
+The following diagram illustrates the architecture of Istio i will be creating in my homelab.
+
+![](/assets/images/istio-servicemesh-part1/istio-system.png)
+
+## Step 1: Istiod instalation
+
+First, add and update the Istio Helm repository:
 
 ```bash
 helm repo add istio https://istio-release.storage.googleapis.com/charts
 helm repo update
 ```
+Then install the base chart, which contains the cluster-wide CRDs, and deploy the control plane in the istio-system namespace.
+
+```bash
+helm install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace
+```
+
+### Step 2: Installing add-ons
+
+**Kiali:** It’s an observability and operational console for Istio. It shows the topology of the mesh, the health of workloads, and lets you inspect and validate Istio configuration (VirtualServices, DestinationRules, Gateways, AuthorizationPolicies, etc.).
+**Prometheus:** It provides monitoring and alerting capabilities for the service mesh. It also provides the metrics that Kiali uses to graph the health and performance of services.
+
+```bash
+#Istio dashaboard
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.27/samples/addons/kiali.yaml
+#Metrics
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.27/samples/addons/prometheus.yaml
+```
+
+## Step 3 - Exposing kiali and grafana internally
+
+I use MetalLB to create internal LoadBalancer IPs and expose the Istio Ingress Gateway on ports 80/443 (mapped to Envoy 8080/8443). This allows external access to services (e.g., Kiali, Prometheus) through Gateway/VirtualService routing.
+
+```bash
+#Istio dashaboard
+kubectl create namespace istio-ingress
+helm install istio-ingress istio/gateway -n istio-ingress --set service.type=LoadBalancer  --set service.ports[0].name=http  --set service.ports[0].port=80  --set service.ports[0].targetPort=8080  --set service.ports[1].name=https --set service.ports[1].port=443 --set service.ports[1].targetPort=8443
+```
 
 
-## Step 1 — Install Istio
-(commands + explanation)
+# In progress....
 
-## Step 2 — Enable mTLS
-(commands + explanation)
 
-## Step 3 — Validate
-(commands + screenshots)
-
-## Troubleshooting
-- Common error #1
-- Common error #2
 
 ## Summary
 - What we achieved
